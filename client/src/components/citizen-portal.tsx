@@ -282,7 +282,7 @@ export function CitizenPortal() {
   const [ambulancesLoading, setAmbulancesLoading] = useState(true);
   const [selectedHospitalId, setSelectedHospitalId] = useState("");
   const [selectedAmbulanceId, setSelectedAmbulanceId] = useState("");
-  const [patientName, setPatientName] = useState("Patient");
+  const [patientName, setPatientName] = useState("");
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
   
@@ -571,6 +571,7 @@ export function CitizenPortal() {
                 <label className="block">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Patient Name</span>
                   <input value={patientName} onChange={(e) => setPatientName(e.target.value)}
+                    placeholder="Enter your name"
                     className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition-all duration-150 focus:border-red-400 focus:ring-2 focus:ring-red-100" />
                 </label>
                 <button type="button" onClick={handleBook} disabled={!canBook}
