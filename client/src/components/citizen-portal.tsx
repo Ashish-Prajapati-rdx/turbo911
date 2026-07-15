@@ -1,7 +1,18 @@
 "use client";
 
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
-import { Search, MapPin, Navigation, Truck, Building, Ambulance, CheckCircle2, User, Loader2, Hospital as HospitalIcon } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Navigation,
+  Truck,
+  Building,
+  Ambulance,
+  CheckCircle2,
+  User,
+  Loader2,
+  Hospital as HospitalIcon,
+} from "lucide-react";
 import {
   type EmergencyBooking,
   INDORE_HUBS,
@@ -79,16 +90,29 @@ function HospitalCard({
           </span>
         </div>
         <div className="absolute bottom-3 left-3 right-3">
-          <h3 className="text-base font-bold text-white drop-shadow-md">{hospital.name}</h3>
+          <h3 className="text-base font-bold text-white drop-shadow-md">
+            {hospital.name}
+          </h3>
           <p className="flex items-center gap-1 text-xs text-white/80">
-            <MapPin className="h-3 w-3" />{hospital.hub}
+            <MapPin className="h-3 w-3" />
+            {hospital.hub}
           </p>
         </div>
         {selected && (
           <div className="absolute right-3 top-3">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow-sm">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </span>
           </div>
@@ -96,31 +120,64 @@ function HospitalCard({
       </div>
       <div className="space-y-3 p-4">
         <div className="flex flex-wrap gap-1.5">
-          <StatusTag tone={icuTone} label={`ICU: ${hospital.icuAvailable}/${hospital.icuTotal}`} />
-          <StatusTag tone={hospital.oxygenBeds > 0 ? "safe" : "critical"} label={`Oxygen: ${hospital.oxygenBeds}`} />
-          <StatusTag tone="neutral" label={`General: ${hospital.generalBeds}`} />
+          <StatusTag
+            tone={icuTone}
+            label={`ICU: ${hospital.icuAvailable}/${hospital.icuTotal}`}
+          />
+          <StatusTag
+            tone={hospital.oxygenBeds > 0 ? "safe" : "critical"}
+            label={`Oxygen: ${hospital.oxygenBeds}`}
+          />
+          <StatusTag
+            tone="neutral"
+            label={`General: ${hospital.generalBeds}`}
+          />
         </div>
         <div className="flex flex-wrap gap-1.5">
           {hospital.specialists.map((spec) => (
-            <StatusTag key={spec.role} tone={spec.status === "ON DUTY" ? "safe" : "critical"}
-              label={`${spec.role.split(" ")[0]}: ${spec.status === "ON DUTY" ? "✅" : "❌"}`} />
+            <StatusTag
+              key={spec.role}
+              tone={spec.status === "ON DUTY" ? "safe" : "critical"}
+              label={`${spec.role.split(" ")[0]}: ${spec.status === "ON DUTY" ? "✅" : "❌"}`}
+            />
           ))}
         </div>
         <div className="flex items-center gap-2 pt-1">
-          <button type="button" onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-            className={cn("flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all duration-200",
-              showMap ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700")}>
-            <MapPin className="h-3.5 w-3.5" />{showMap ? "Hide Map" : "View Location"}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMap(!showMap);
+            }}
+            className={cn(
+              "flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all duration-200",
+              showMap
+                ? "border-blue-200 bg-blue-50 text-blue-700"
+                : "border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700",
+            )}
+          >
+            <MapPin className="h-3.5 w-3.5" />
+            {showMap ? "Hide Map" : "View Location"}
           </button>
-          <button type="button" onClick={onSelect}
-            className={cn("flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-200",
-              selected ? "bg-red-500 text-white hover:bg-red-600" : "border border-slate-200 text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600")}>
+          <button
+            type="button"
+            onClick={onSelect}
+            className={cn(
+              "flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-200",
+              selected
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : "border border-slate-200 text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600",
+            )}
+          >
             {selected ? "Selected ✓" : "Select Hospital"}
           </button>
         </div>
         {showMap && (
           <div className="h-48 w-full overflow-hidden rounded-lg border border-slate-200 transition-all duration-300">
-            <GoogleMapEmbed mapUrl={hospital.mapEmbedUrl} name={hospital.name} />
+            <GoogleMapEmbed
+              mapUrl={hospital.mapEmbedUrl}
+              name={hospital.name}
+            />
           </div>
         )}
       </div>
@@ -140,26 +197,57 @@ function AmbulanceCard({
   onSelect: () => void;
 }) {
   const isAvailable = ambulance.status === "AVAILABLE";
-  const statusTone = ambulance.triage === "CRITICAL" ? "critical" : ambulance.triage === "SERIOUS" ? "warn" : "safe";
+  const statusTone =
+    ambulance.triage === "CRITICAL"
+      ? "critical"
+      : ambulance.triage === "SERIOUS"
+        ? "warn"
+        : "safe";
 
   return (
-    <button type="button" onClick={isAvailable ? onSelect : undefined} disabled={!isAvailable}
-      className={cn("w-full text-left rounded-lg border p-4 transition-all duration-300",
-        isAvailable ? "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md" : "cursor-not-allowed opacity-70",
-        booked ? "border-emerald-500 bg-emerald-50" : !isAvailable ? "border-slate-200 bg-slate-100" : selected ? "border-red-500 bg-red-50" : "border-slate-200 bg-white")}>
+    <button
+      type="button"
+      onClick={isAvailable ? onSelect : undefined}
+      disabled={!isAvailable}
+      className={cn(
+        "w-full text-left rounded-lg border p-4 transition-all duration-300",
+        isAvailable
+          ? "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+          : "cursor-not-allowed opacity-70",
+        booked
+          ? "border-emerald-500 bg-emerald-50"
+          : !isAvailable
+            ? "border-slate-200 bg-slate-100"
+            : selected
+              ? "border-red-500 bg-red-50"
+              : "border-slate-200 bg-white",
+      )}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{ambulance.vehicle}</h3>
-          <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500"><Truck className="h-3 w-3" />{ambulance.hub}</p>
+          <h3 className="text-sm font-semibold text-slate-900">
+            {ambulance.vehicle}
+          </h3>
+          <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
+            <Truck className="h-3 w-3" />
+            {ambulance.hub}
+          </p>
         </div>
         <div className="text-right">
-          <p className="font-mono text-sm font-semibold text-slate-800">ETA {Math.ceil(ambulance.etaSeconds / 60)} min</p>
-          <p className="font-mono text-[11px] text-slate-400">Triage {ambulance.triage}</p>
+          <p className="font-mono text-sm font-semibold text-slate-800">
+            ETA {Math.ceil(ambulance.etaSeconds / 60)} min
+          </p>
+          <p className="font-mono text-[11px] text-slate-400">
+            Triage {ambulance.triage}
+          </p>
         </div>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <StatusTag tone={statusTone} label={`Patient: ${ambulance.triage}`} />
-        <StatusTag tone={isAvailable ? "safe" : "critical"} label={isAvailable ? "Available" : "Not Available"} />
+        <StatusTag
+          tone={isAvailable ? "safe" : "critical"}
+          label={isAvailable ? "Available" : "Not Available"}
+        />
         <StatusTag tone="neutral" label={`HR ${ambulance.hr}`} />
         <StatusTag tone="neutral" label={`SpO₂ ${ambulance.spo2}%`} />
         {booked ? <StatusTag tone="safe" label="Booked" /> : null}
@@ -169,10 +257,40 @@ function AmbulanceCard({
 }
 
 const STATUS_STEPS = [
-  { key: "requested", label: "Request Sent", icon: (p: any) => <svg className={p.className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg> },
-  { key: "accepted", label: "Ambulance Accepted", icon: (p: any) => <Truck className={p.className} /> },
-  { key: "patient_received", label: "Patient Onboard", icon: (p: any) => <User className={p.className} /> },
-  { key: "completed", label: "Arrived at Hospital", icon: (p: any) => <HospitalIcon className={p.className} /> },
+  {
+    key: "requested",
+    label: "Request Sent",
+    icon: (p: any) => (
+      <svg
+        className={p.className}
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "accepted",
+    label: "Ambulance Accepted",
+    icon: (p: any) => <Truck className={p.className} />,
+  },
+  {
+    key: "patient_received",
+    label: "Patient Onboard",
+    icon: (p: any) => <User className={p.className} />,
+  },
+  {
+    key: "completed",
+    label: "Arrived at Hospital",
+    icon: (p: any) => <HospitalIcon className={p.className} />,
+  },
 ] as const;
 
 type ActiveBooking = {
@@ -206,7 +324,9 @@ function PatientStatusCard({
   const hospital = hospitals.find((h) => h.id === bookingInfo.hospitalId);
   const ambulance = ambulances.find((a) => a.id === bookingInfo.ambulanceId);
   const isCompleted = bookingInfo.status === "completed";
-  const currentStepIdx = STATUS_STEPS.findIndex((s) => s.key === bookingInfo.status);
+  const currentStepIdx = STATUS_STEPS.findIndex(
+    (s) => s.key === bookingInfo.status,
+  );
 
   return (
     <div className="rounded-xl border-2 border-red-200 bg-gradient-to-br from-red-50 to-white p-5 shadow-lg shadow-red-100/50">
@@ -217,21 +337,36 @@ function PatientStatusCard({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">Patient Status</h3>
-            <p className="font-mono text-[10px] text-slate-500">#{bookingInfo.bookingId.slice(-8).toUpperCase()}</p>
+            <p className="font-mono text-[10px] text-slate-500">
+              #{bookingInfo.bookingId.slice(-8).toUpperCase()}
+            </p>
           </div>
         </div>
-        <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider",
-          isCompleted ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider",
+            isCompleted
+              ? "bg-emerald-100 text-emerald-700"
+              : "bg-amber-100 text-amber-700",
+          )}
+        >
           {isCompleted ? "Completed" : "In Progress"}
         </span>
       </div>
 
       <div className="mb-4 rounded-lg border border-slate-200 bg-white p-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600"><User className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600">
+            <User className="h-4 w-4" />
+          </div>
           <div>
-            <p className="text-sm font-semibold text-slate-900">{bookingInfo.patientName}</p>
-            <p className="text-xs text-slate-500">{ambulance?.vehicle ?? "Ambulance"} → {hospital?.name ?? "Hospital"}</p>
+            <p className="text-sm font-semibold text-slate-900">
+              {bookingInfo.patientName}
+            </p>
+            <p className="text-xs text-slate-500">
+              {ambulance?.vehicle ?? "Ambulance"} →{" "}
+              {hospital?.name ?? "Hospital"}
+            </p>
           </div>
         </div>
       </div>
@@ -244,18 +379,50 @@ function PatientStatusCard({
           return (
             <div key={step.key} className="flex gap-3">
               <div className="flex flex-col items-center">
-                <div className={cn("flex h-7 w-7 items-center justify-center rounded-full transition-all duration-500",
-                  isActive ? "bg-red-500 text-white" : "bg-slate-100 text-slate-400", isCurrent && "ring-2 ring-red-200 ring-offset-2")}>
-                  {isActive && idx < currentStepIdx ? <CheckCircle2 className="h-4 w-4" /> : <Icon className={cn("h-4 w-4", isCurrent && !isCompleted && "animate-pulse")} />}
+                <div
+                  className={cn(
+                    "flex h-7 w-7 items-center justify-center rounded-full transition-all duration-500",
+                    isActive
+                      ? "bg-red-500 text-white"
+                      : "bg-slate-100 text-slate-400",
+                    isCurrent && "ring-2 ring-red-200 ring-offset-2",
+                  )}
+                >
+                  {isActive && idx < currentStepIdx ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <Icon
+                      className={cn(
+                        "h-4 w-4",
+                        isCurrent && !isCompleted && "animate-pulse",
+                      )}
+                    />
+                  )}
                 </div>
-                {idx < STATUS_STEPS.length - 1 && <div className={cn("mt-1 h-8 w-0.5", idx < currentStepIdx ? "bg-red-300" : "bg-slate-200")} />}
+                {idx < STATUS_STEPS.length - 1 && (
+                  <div
+                    className={cn(
+                      "mt-1 h-8 w-0.5",
+                      idx < currentStepIdx ? "bg-red-300" : "bg-slate-200",
+                    )}
+                  />
+                )}
               </div>
               <div className="pb-6 pt-1">
-                <p className={cn("text-xs font-medium", isActive ? "text-slate-900" : "text-slate-400")}>{step.label}</p>
+                <p
+                  className={cn(
+                    "text-xs font-medium",
+                    isActive ? "text-slate-900" : "text-slate-400",
+                  )}
+                >
+                  {step.label}
+                </p>
                 {isCurrent && !isCompleted && (
                   <div className="mt-1 flex items-center gap-1.5">
                     <Loader2 className="h-3 w-3 animate-spin text-red-500" />
-                    <span className="text-[11px] text-red-600">{bookingResult}</span>
+                    <span className="text-[11px] text-red-600">
+                      {bookingResult}
+                    </span>
                   </div>
                 )}
               </div>
@@ -265,8 +432,11 @@ function PatientStatusCard({
       </div>
 
       {isCompleted && (
-        <button type="button" onClick={onDismiss}
-          className="w-full rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-semibold text-emerald-700 transition-all hover:bg-emerald-100">
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="w-full rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-semibold text-emerald-700 transition-all hover:bg-emerald-100"
+        >
           ✓ Patient Arrived - Dismiss
         </button>
       )}
@@ -285,9 +455,11 @@ export function CitizenPortal() {
   const [patientName, setPatientName] = useState("");
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
-  
+
   // Simple booking state
-  const [bookingInfo, setBookingInfoState] = useState<ActiveBooking | null>(null);
+  const [bookingInfo, setBookingInfoState] = useState<ActiveBooking | null>(
+    null,
+  );
   const [bookingResult, setBookingResult] = useState<string | null>(null);
   const bookingInfoRef = useRef<ActiveBooking | null>(null);
 
@@ -300,7 +472,9 @@ export function CitizenPortal() {
         setBookingInfoState(saved);
         setBookingResult(bookingStatusCopy[saved.status]);
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   // Save to localStorage whenever bookingInfo changes
@@ -314,25 +488,47 @@ export function CitizenPortal() {
   }, []);
 
   const toggleHub = (hub: string) =>
-    setActiveHubs((prev) => prev.includes(hub) ? prev.filter((h) => h !== hub) : [...prev, hub]);
+    setActiveHubs((prev) =>
+      prev.includes(hub) ? prev.filter((h) => h !== hub) : [...prev, hub],
+    );
 
-  const filtered = useMemo(() => hospitals.filter((h) => {
-    const matchesHub = activeHubs.length === 0 || activeHubs.includes(h.hub);
-    const matchesQuery = h.name.toLowerCase().includes(query.toLowerCase());
-    return matchesHub && matchesQuery;
-  }), [query, activeHubs, hospitals]);
+  const filtered = useMemo(
+    () =>
+      hospitals.filter((h) => {
+        const matchesHub =
+          activeHubs.length === 0 || activeHubs.includes(h.hub);
+        const matchesQuery = h.name.toLowerCase().includes(query.toLowerCase());
+        return matchesHub && matchesQuery;
+      }),
+    [query, activeHubs, hospitals],
+  );
 
-  const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId) ?? hospitals[0];
+  const selectedHospital =
+    hospitals.find((h) => h.id === selectedHospitalId) ?? hospitals[0];
 
-  const availableAmbulances = useMemo(() => ambulances.filter((a) => a.status === "AVAILABLE"), [ambulances]);
-  const selectedAmbulance = availableAmbulances.find((a) => a.id === selectedAmbulanceId) ?? availableAmbulances[0];
+  const availableAmbulances = useMemo(
+    () => ambulances.filter((a) => a.status === "AVAILABLE"),
+    [ambulances],
+  );
+  const selectedAmbulance =
+    availableAmbulances.find((a) => a.id === selectedAmbulanceId) ??
+    availableAmbulances[0];
 
-  const nearestAmbulance = useMemo(() =>
-    availableAmbulances.reduce<IncomingUnit | undefined>((best, current) =>
-      !best || current.etaSeconds < best.etaSeconds ? current : best, undefined), [availableAmbulances]);
+  const nearestAmbulance = useMemo(
+    () =>
+      availableAmbulances.reduce<IncomingUnit | undefined>(
+        (best, current) =>
+          !best || current.etaSeconds < best.etaSeconds ? current : best,
+        undefined,
+      ),
+    [availableAmbulances],
+  );
 
   const activeBooking = bookingInfo && bookingInfo.status !== "completed";
-  const canBook = Boolean(selectedHospital && selectedAmbulance) && !bookingLoading && !activeBooking;
+  const canBook =
+    Boolean(selectedHospital && selectedAmbulance) &&
+    !bookingLoading &&
+    !activeBooking;
 
   // Simple fetch ambulances - MUST return promise chain for .finally()
   const fetchAmbulances = useCallback(() => {
@@ -342,7 +538,9 @@ export function CitizenPortal() {
         const next = data || [];
         setAmbulances(next);
         setSelectedAmbulanceId((current) => {
-          const stillAvailable = next.some((a) => a.id === current && a.status === "AVAILABLE");
+          const stillAvailable = next.some(
+            (a) => a.id === current && a.status === "AVAILABLE",
+          );
           if (stillAvailable) return current;
           return next.find((a) => a.status === "AVAILABLE")?.id ?? "";
         });
@@ -369,7 +567,7 @@ export function CitizenPortal() {
         .then((r) => r.json())
         .then((data: EmergencyBooking) => {
           if (!data?.bookingId) return;
-          
+
           // Always update result text
           setBookingResult(bookingStatusCopy[data.status]);
 
@@ -400,7 +598,11 @@ export function CitizenPortal() {
 
   // Auto-select first ambulance
   useEffect(() => {
-    if (selectedAmbulanceId && availableAmbulances.some((a) => a.id === selectedAmbulanceId)) return;
+    if (
+      selectedAmbulanceId &&
+      availableAmbulances.some((a) => a.id === selectedAmbulanceId)
+    )
+      return;
     setSelectedAmbulanceId(availableAmbulances[0]?.id ?? "");
   }, [availableAmbulances, selectedAmbulanceId]);
 
@@ -411,10 +613,13 @@ export function CitizenPortal() {
       .then((data: Hospital[]) => {
         if (!mounted) return;
         setHospitals(data || []);
-        if (!selectedHospitalId && data?.length) setSelectedHospitalId(data[0].id);
+        if (!selectedHospitalId && data?.length)
+          setSelectedHospitalId(data[0].id);
       })
       .catch(() => {});
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [selectedHospitalId]);
 
   async function handleBook() {
@@ -436,8 +641,11 @@ export function CitizenPortal() {
       if (!res.ok) {
         setBookingError(data.message || "Booking failed");
       } else {
-        setAmbulances((prev) => prev.map((a) =>
-          a.id === selectedAmbulance.id ? { ...a, status: "BUSY" } : a));
+        setAmbulances((prev) =>
+          prev.map((a) =>
+            a.id === selectedAmbulance.id ? { ...a, status: "BUSY" } : a,
+          ),
+        );
         setBookingInfo({
           bookingId: data.bookingId,
           ambulanceId: selectedAmbulance.id,
@@ -475,20 +683,34 @@ export function CitizenPortal() {
         <label className="relative block">
           <span className="sr-only">Search hospitals</span>
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input value={query} onChange={(e) => setQuery(e.target.value)}
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search facility..."
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-red-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-100" />
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-red-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-100"
+          />
         </label>
 
-        <p className="mb-3 mt-5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Indore Hubs</p>
+        <p className="mb-3 mt-5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+          Indore Hubs
+        </p>
         <div className="flex flex-col gap-1.5">
           {INDORE_HUBS.map((hub) => {
             const active = activeHubs.includes(hub);
             return (
-              <button key={hub} type="button" onClick={() => toggleHub(hub)}
-                className={cn("flex items-center gap-2 rounded-lg border px-3 py-2.5 text-left text-xs font-medium transition-all duration-200 active:scale-[0.98]",
-                  active ? "border-red-200 bg-red-50 text-red-700 shadow-sm" : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800")}>
-                <MapPin className="h-3.5 w-3.5" />{hub}
+              <button
+                key={hub}
+                type="button"
+                onClick={() => toggleHub(hub)}
+                className={cn(
+                  "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-left text-xs font-medium transition-all duration-200 active:scale-[0.98]",
+                  active
+                    ? "border-red-200 bg-red-50 text-red-700 shadow-sm"
+                    : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800",
+                )}
+              >
+                <MapPin className="h-3.5 w-3.5" />
+                {hub}
               </button>
             );
           })}
@@ -498,17 +720,29 @@ export function CitizenPortal() {
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
             {nearestAmbulance ? (
               <>
-                <p className="font-semibold text-slate-900">{nearestAmbulance.vehicle}</p>
-                <p className="mt-1 text-sm text-slate-600">Hub: {nearestAmbulance.hub}</p>
-                <p className="text-sm text-slate-600">ETA: {Math.ceil(nearestAmbulance.etaSeconds / 60)} min</p>
+                <p className="font-semibold text-slate-900">
+                  {nearestAmbulance.vehicle}
+                </p>
+                <p className="mt-1 text-sm text-slate-600">
+                  Hub: {nearestAmbulance.hub}
+                </p>
+                <p className="text-sm text-slate-600">
+                  ETA: {Math.ceil(nearestAmbulance.etaSeconds / 60)} min
+                </p>
               </>
             ) : (
               <>
-                <p className="font-semibold text-red-700">Ambulance Not Available</p>
-                <p className="mt-1 text-sm text-slate-600">All ambulances are busy right now.</p>
+                <p className="font-semibold text-red-700">
+                  Ambulance Not Available
+                </p>
+                <p className="mt-1 text-sm text-slate-600">
+                  All ambulances are busy right now.
+                </p>
               </>
             )}
-            <p className="mt-2 text-[11px] text-slate-500">Select an ambulance below to book it.</p>
+            <p className="mt-2 text-[11px] text-slate-500">
+              Select an ambulance below to book it.
+            </p>
           </div>
         </Panel>
       </aside>
@@ -527,17 +761,29 @@ export function CitizenPortal() {
         <Panel title="Nearby Facilities" action={header}>
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="mt-1 text-[11px] text-slate-400">Choose the hospital you want to send the ambulance to.</p>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Choose the hospital you want to send the ambulance to.
+              </p>
             </div>
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1.5 font-mono text-xs text-slate-500">
-              <Building className="h-3 w-3" />{filtered.length} results
+              <Building className="h-3 w-3" />
+              {filtered.length} results
             </span>
           </div>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             {filtered.map((h) => (
-              <HospitalCard key={h.id} hospital={h} selected={h.id === selectedHospitalId} onSelect={() => setSelectedHospitalId(h.id)} />
+              <HospitalCard
+                key={h.id}
+                hospital={h}
+                selected={h.id === selectedHospitalId}
+                onSelect={() => setSelectedHospitalId(h.id)}
+              />
             ))}
-            {filtered.length === 0 && <p className="col-span-full py-16 text-center text-sm text-slate-400">No facilities match your filters.</p>}
+            {filtered.length === 0 && (
+              <p className="col-span-full py-16 text-center text-sm text-slate-400">
+                No facilities match your filters.
+              </p>
+            )}
           </div>
         </Panel>
 
@@ -545,22 +791,40 @@ export function CitizenPortal() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Selected Hospital</p>
-                <p className="mt-2 text-sm font-semibold text-slate-900">{selectedHospital?.name}</p>
-                <p className="text-sm text-slate-500">{selectedHospital?.hub}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Selected Hospital
+                </p>
+                <p className="mt-2 text-sm font-semibold text-slate-900">
+                  {selectedHospital?.name}
+                </p>
+                <p className="text-sm text-slate-500">
+                  {selectedHospital?.hub}
+                </p>
               </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Selected Ambulance</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Selected Ambulance
+                </p>
                 {selectedAmbulance ? (
                   <>
-                    <p className="mt-2 text-sm font-semibold text-slate-900">{selectedAmbulance.vehicle}</p>
-                    <p className="text-sm text-slate-500">ETA {Math.ceil(selectedAmbulance.etaSeconds / 60)} min</p>
-                    <div className="mt-3"><StatusTag tone="safe" label="Available" /></div>
+                    <p className="mt-2 text-sm font-semibold text-slate-900">
+                      {selectedAmbulance.vehicle}
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      ETA {Math.ceil(selectedAmbulance.etaSeconds / 60)} min
+                    </p>
+                    <div className="mt-3">
+                      <StatusTag tone="safe" label="Available" />
+                    </div>
                   </>
                 ) : (
                   <>
-                    <p className="mt-2 text-sm font-semibold text-red-700">Ambulance Not Available</p>
-                    <p className="text-sm text-slate-500">Busy ambulances cannot be booked.</p>
+                    <p className="mt-2 text-sm font-semibold text-red-700">
+                      Ambulance Not Available
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      Busy ambulances cannot be booked.
+                    </p>
                   </>
                 )}
               </div>
@@ -569,14 +833,27 @@ export function CitizenPortal() {
             {!bookingInfo && (
               <>
                 <label className="block">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Patient Name</span>
-                  <input value={patientName} onChange={(e) => setPatientName(e.target.value)}
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                    Patient Name
+                  </span>
+                  <input
+                    value={patientName}
+                    onChange={(e) => setPatientName(e.target.value)}
                     placeholder="Enter your name"
-                    className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition-all duration-150 focus:border-red-400 focus:ring-2 focus:ring-red-100" />
+                    className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition-all duration-150 focus:border-red-400 focus:ring-2 focus:ring-red-100"
+                  />
                 </label>
-                <button type="button" onClick={handleBook} disabled={!canBook}
-                  className="w-full rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold uppercase tracking-widest text-white shadow-sm transition-all duration-200 hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60">
-                  {bookingLoading ? "Sending Request..." : selectedAmbulance ? "Request Ambulance" : "Ambulance Not Available"}
+                <button
+                  type="button"
+                  onClick={handleBook}
+                  disabled={!canBook}
+                  className="w-full rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold uppercase tracking-widest text-white shadow-sm transition-all duration-200 hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {bookingLoading
+                    ? "Sending Request..."
+                    : selectedAmbulance
+                      ? "Request Ambulance"
+                      : "Ambulance Not Available"}
                 </button>
               </>
             )}
@@ -586,7 +863,9 @@ export function CitizenPortal() {
                 <p>{bookingResult}</p>
               </div>
             )}
-            {bookingError && <p className="text-sm text-red-700">{bookingError}</p>}
+            {bookingError && (
+              <p className="text-sm text-red-700">{bookingError}</p>
+            )}
           </div>
         </Panel>
       </main>
@@ -595,42 +874,66 @@ export function CitizenPortal() {
         <Panel title="Available Ambulances">
           <div className="space-y-3">
             {ambulances.map((ambulance) => (
-              <AmbulanceCard key={ambulance.id} ambulance={ambulance}
+              <AmbulanceCard
+                key={ambulance.id}
+                ambulance={ambulance}
                 selected={ambulance.id === selectedAmbulanceId}
                 booked={bookingInfo?.ambulanceId === ambulance.id}
-                onSelect={() => setSelectedAmbulanceId(ambulance.id)} />
+                onSelect={() => setSelectedAmbulanceId(ambulance.id)}
+              />
             ))}
-            {!ambulancesLoading && ambulances.length === 0 && <p className="py-6 text-center text-sm text-slate-400">Ambulance Not Available</p>}
-            {ambulancesLoading && <p className="py-6 text-center text-sm text-slate-400">Loading ambulances...</p>}
+            {!ambulancesLoading && ambulances.length === 0 && (
+              <p className="py-6 text-center text-sm text-slate-400">
+                Ambulance Not Available
+              </p>
+            )}
+            {ambulancesLoading && (
+              <p className="py-6 text-center text-sm text-slate-400">
+                Loading ambulances...
+              </p>
+            )}
           </div>
         </Panel>
 
         <Panel title="Proximity Map">
           <div className="relative h-72 overflow-hidden bg-slate-50">
-            <div className="absolute inset-0 opacity-60"
+            <div
+              className="absolute inset-0 opacity-60"
               style={{
-                backgroundImage: "linear-gradient(to right, rgb(226 232 240) 1px, transparent 1px), linear-gradient(to bottom, rgb(226 232 240) 1px, transparent 1px)",
+                backgroundImage:
+                  "linear-gradient(to right, rgb(226 232 240) 1px, transparent 1px), linear-gradient(to bottom, rgb(226 232 240) 1px, transparent 1px)",
                 backgroundSize: "28px 28px",
-              }} />
+              }}
+            />
             <div className="absolute left-1/2 top-1/2 flex h-3 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
               <span className="absolute inline-flex h-8 w-8 rounded-full bg-red-500/25 motion-safe:animate-ping" />
               <Navigation className="relative h-4 w-4 text-red-600" />
             </div>
             {filtered.slice(0, 4).map((h, i) => {
               const positions = [
-                { top: "18%", left: "28%" }, { top: "32%", left: "68%" },
-                { top: "70%", left: "40%" }, { top: "58%", left: "78%" },
+                { top: "18%", left: "28%" },
+                { top: "32%", left: "68%" },
+                { top: "70%", left: "40%" },
+                { top: "58%", left: "78%" },
               ];
               return (
-                <div key={h.id} className="absolute -translate-x-1/2 -translate-y-1/2" style={positions[i]}>
+                <div
+                  key={h.id}
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
+                  style={positions[i]}
+                >
                   <span className="block h-2.5 w-2.5 rounded-sm border border-emerald-500 bg-emerald-400 shadow-sm" />
-                  <span className="mt-1 block whitespace-nowrap font-mono text-[9px] text-slate-500">{h.distanceKm.toFixed(1)}km</span>
+                  <span className="mt-1 block whitespace-nowrap font-mono text-[9px] text-slate-500">
+                    {h.distanceKm.toFixed(1)}km
+                  </span>
                 </div>
               );
             })}
           </div>
           <div className="border-t border-slate-200 p-3">
-            <p className="text-[11px] text-slate-400">Simulated distances from current location.</p>
+            <p className="text-[11px] text-slate-400">
+              Simulated distances from current location.
+            </p>
           </div>
         </Panel>
       </aside>
